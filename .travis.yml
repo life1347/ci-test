@@ -19,6 +19,10 @@ before_install:
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - sudo sysctl net.ipv6.conf.all.disable_ipv6=0
 
-script:
-  - cd ${TRAVIS_BUILD_DIR}/codebase
-  - ./build.sh
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - cd ${TRAVIS_BUILD_DIR}/codebase
+      - ./build.sh
